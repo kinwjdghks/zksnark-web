@@ -8,5 +8,8 @@
     },
     "workspaces": [
         "rc-circom/"
-    ]
+    ],
+    "dependencies": {
+        "snarkjs": "^0.7.4"
+    }
 }

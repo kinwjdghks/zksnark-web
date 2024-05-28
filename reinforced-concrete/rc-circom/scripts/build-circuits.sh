@@ -2,7 +2,8 @@
 #!/bin/bash
 set -e
 
-cd "$(dirname "$0")"
+
+cd "$(dirname "$0")" #change the directory to the location of the script.
 mkdir -p ../build/contracts
 mkdir -p ../build/setup
 
@@ -72,25 +73,25 @@ cp $circuit_name\_js/$circuit_name.wasm $zkeypath/circuit.wasm
 cp ../build/setup/final.zkey $zkeypath/final.zkey
 
 #generate a configuration file with metadata about the build process, including SHA-256 checksums for the generated files.
-# shasumcmd="shasum -a 256"
+shasumcmd="shasum -a 256"
 
-# config_path="$zkeypath/circuit.config.toml"
-# echo -e "" >> $config_path
+config_path="$zkeypath/circuit.config.toml"
+echo -e "" >> $config_path
 
-# echo -e "[Circuit_Build]" >> $config_path
-# echo -e "Circom_Version = \"$(circom --version)\"" >> $config_path
-# echo -e "GitHub_URL = \"$(git config --get remote.origin.url)\""  >> $config_path
-# echo -e "Git_Commit = \"$(git describe --always)\"" >> $config_path
-# echo -e "Compilation_Time = $(date +%s)" >> $config_path
+echo -e "[Circuit_Build]" >> $config_path
+echo -e "Circom_Version = \"$(circom --version)\"" >> $config_path
+echo -e "GitHub_URL = \"$(git config --get remote.origin.url)\""  >> $config_path
+echo -e "Git_Commit = \"$(git describe --always)\"" >> $config_path
+echo -e "Compilation_Time = $(date +%s)" >> $config_path
 
-# echo -e "" >> $config_path
-# echo -e "[Files]" >> $config_path
-# echo -e "Wasm = \"circuit.wasm\"" >> $config_path
-# wasm_sha256=$($shasumcmd $zkeypath/circuit.wasm | awk '{print $1}')
-# echo -e "Wasm_SHA256SUM = \"$wasm_sha256\"" >> $config_path
-# echo -e "Zkey = \"final.zkey\"" >> $config_path
-# zkey_sha256=$($shasumcmd $zkeypath/final.zkey | awk '{print $1}')
-# echo -e "Zkey_SHA256SUM = \"$zkey_sha256\"" >> $config_path
-# echo -e "Verification_Key = \"verification_key.json\"" >> $config_path
-# vkey_sha256=$($shasumcmd $zkeypath/verification_key.json | awk '{print $1}')
-# echo -e "Verification_Key_SHA256SUM = \"$vkey_sha256\"" >> $config_path
+echo -e "" >> $config_path
+echo -e "[Files]" >> $config_path
+echo -e "Wasm = \"circuit.wasm\"" >> $config_path
+wasm_sha256=$($shasumcmd $zkeypath/circuit.wasm | awk '{print $1}')
+echo -e "Wasm_SHA256SUM = \"$wasm_sha256\"" >> $config_path
+echo -e "Zkey = \"final.zkey\"" >> $config_path
+zkey_sha256=$($shasumcmd $zkeypath/final.zkey | awk '{print $1}')
+echo -e "Zkey_SHA256SUM = \"$zkey_sha256\"" >> $config_path
+echo -e "Verification_Key = \"verification_key.json\"" >> $config_path
+vkey_sha256=$($shasumcmd $zkeypath/verification_key.json | awk '{print $1}')
+echo -e "Verification_Key_SHA256SUM = \"$vkey_sha256\"" >> $config_path
