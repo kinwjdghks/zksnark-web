@@ -1,23 +1,52 @@
-"use client"
+"use client";
 import { zkdoc } from "@/template/doc";
-import { Pagination, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, getKeyValue } from "@nextui-org/react";
-import { ReactNode, useMemo, useState } from "react";
+import {
+  Pagination,
+  Spinner,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+  getKeyValue,
+} from "@nextui-org/react";
+import { Key, ReactNode, useMemo, useState } from "react";
 
 type TableProps = {
-    docs: zkdoc[]
-    isLoading: boolean
-}
+  docs: zkdoc[];
+  isLoading: boolean;
+};
 
-const DocTable = ({docs, isLoading}:TableProps):ReactNode => {
+const DocTable = ({ docs, isLoading }: TableProps): ReactNode => {
   const rowsPerPage = 10;
-  const [page, setPage] = useState<number>(1)
-
+  const [page, setPage] = useState<number>(1);
 
   const pages = useMemo(() => {
     return docs?.length ? Math.ceil(docs.length / rowsPerPage) : 0;
   }, [docs?.length, rowsPerPage]);
 
   const loadingState = isLoading || docs?.length === 0 ? "loading" : "idle";
+
+  const renderCell = (
+    doc: zkdoc,
+    columnKey: Key
+  ) => {
+    const cellValue = doc[columnKey as "timestamp" | "title" | "uploader" | "hash"];
+  
+    switch (columnKey) {
+      case "timestamp":
+        const date = cellValue as Date;
+        return (
+          <p className="w-full text-center">
+            {new Date(date).toDateString() + "\n"}
+            {new Date(date).toTimeString().slice(0, 8)}
+          </p>
+        );
+      default:
+        return <p>{cellValue as string}</p>;
+    }
+  };
 
   return (
     <Table
@@ -37,28 +66,35 @@ const DocTable = ({docs, isLoading}:TableProps):ReactNode => {
           </div>
         ) : null
       }
-    //   {...args}
+      //   {...args}
     >
       <TableHeader>
-        <TableColumn key="date">Date</TableColumn>
-        <TableColumn key="title">Title</TableColumn>
-        <TableColumn key="uploader">Uploader</TableColumn>
-        <TableColumn key="id">Id</TableColumn>
+        <TableColumn 
+          key="timestamp"
+          className="w-56 h-16 text-[1.2rem] text-center ">Date</TableColumn>
+        <TableColumn 
+          key="title"
+          className="h-16 text-[1.2rem] text-center">Title</TableColumn>
+        <TableColumn 
+          key="uploader"
+          className="w-60 h-16 text-[1.2rem] text-center">Uploader</TableColumn>
+        <TableColumn 
+          key="hash"
+          className="w-60 h-16 text-[1.2rem] text-center">Id</TableColumn>
       </TableHeader>
       <TableBody
         items={docs}
         loadingContent={<Spinner />}
         loadingState={loadingState}
       >
-        {doc => (
-          <TableRow key={doc.hash}>
-            {(columnKey) => <TableCell>{getKeyValue(doc, columnKey)}</TableCell>}
+        {(doc) => (
+          <TableRow key={doc.hash} className="text-center">
+            {(columnKey) => <TableCell>{renderCell(doc, columnKey)}</TableCell>}
           </TableRow>
         )}
       </TableBody>
     </Table>
   );
-}
-
+};
 
 export default DocTable;
