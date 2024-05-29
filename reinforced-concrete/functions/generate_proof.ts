@@ -1,6 +1,6 @@
-// const snarkjs = require("snarkjs");
+const snarkjs = require("snarkjs");
 // const fs = require("fs");
-import snarkjs from 'snarkjs';
+// import snarkjs from 'snarkjs';
 import fs from 'fs';
 
 export async function proof_generator(docID: string) {
