@@ -1,8 +1,9 @@
-// import snarkjs from 'snarkjs';
-// import fs from 'fs';
-const snarkjs = require("snarkjs");
+import snarkjs from 'snarkjs';
+import fs from 'fs';
+// const snarkjs = require("snarkjs");
 const fs = require("fs");
-const path = require("path");
+// const path = require("path");
+import path from 'path';
 
 async function proof_generator(docId) {
     

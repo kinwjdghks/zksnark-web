@@ -9,8 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@types/filesystem": "^0.0.36",
     "@nextui-org/react": "^2.4.0",
+    "@types/filesystem": "^0.0.36",
+    "@types/snarkjs": "^0.7.8",
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18"
@@ -22,5 +23,6 @@
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
-  }
+  },
+  "type": "module"
 }

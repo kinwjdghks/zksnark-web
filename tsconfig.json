@@ -21,6 +21,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "reinforced-concrete/functions/generate_proof.test.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "reinforced-concrete/functions/generate_proof.test.js", "reinforced-concrete/functions/hash.js"],
   "exclude": ["node_modules"]
 }

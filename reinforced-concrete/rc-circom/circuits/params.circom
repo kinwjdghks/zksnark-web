@@ -47,7 +47,7 @@ template SI() {
     }
 }
 
-
+// BN256
 function DIVISORS() {
     return [
         673, 678, 667, 683, 680, 655,
@@ -58,6 +58,8 @@ function DIVISORS() {
     ];
 }
 
+
+//BN256
 function SBOX(i) {
     var lut[683] = [
         377,

@@ -1,9 +1,11 @@
-import DocList from "./components/DocList";
+import MainPage from "./components/MainPage";
+import Sidebar from "./components/Sidebar";
 
 export default function Home() {
   return (
-    <main className="min-h-screen w-screen items-center justify-center p-24">
-      <DocList/>
+    <main className="flex min-h-screen w-screen">
+      <Sidebar/>
+      <MainPage/>
     </main>
   );
 }

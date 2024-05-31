@@ -32,7 +32,7 @@ const DocTable = ({ docs, isLoading }: TableProps): ReactNode => {
     doc: zkdoc,
     columnKey: Key
   ) => {
-    const cellValue = doc[columnKey as "timestamp" | "title" | "uploader" | "hash"];
+    const cellValue = doc[columnKey as "timestamp" | "title" | "hash"];
   
     switch (columnKey) {
       case "timestamp":
@@ -75,9 +75,6 @@ const DocTable = ({ docs, isLoading }: TableProps): ReactNode => {
         <TableColumn 
           key="title"
           className="h-16 text-[1.2rem] text-center">Title</TableColumn>
-        <TableColumn 
-          key="uploader"
-          className="w-60 h-16 text-[1.2rem] text-center">Uploader</TableColumn>
         <TableColumn 
           key="hash"
           className="w-60 h-16 text-[1.2rem] text-center">Id</TableColumn>
