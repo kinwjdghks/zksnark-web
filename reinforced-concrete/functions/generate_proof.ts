@@ -1,30 +1,17 @@
-// const snarkjs = require("snarkjs");
-// const fs = require("fs");
-import snarkjs from 'snarkjs';
-import fs from 'fs';
+export const generateProof = async (docID: string) => {
 
-export async function proof_generator(docID: string) {
+    const state1 = 51252424195209
+    const state2 = 65120471209579
 
-    // const input = {a: 10, b: 21};
-    const input = {
-        state: [10, 21] // Example values, replace with actual values
-    };
-    const { proof, publicSignals } = await snarkjs.groth16.fullProve(
-        input, 
-        "reinforced-concrete/rc-circom/zkeyFiles/reinforcedConcreteTest/circuit.wasm",
-        "reinforced-concrete/rc-circom/zkeyFiles/reinforcedConcreteTest/final.zkey"
+    const proofReq = await fetch(
+        `http://localhost:3000/api/proof?state1=${state1}&state2=${state2}`,
+        {
+            method:"GET",
+            headers:{
+                "Content-Type":"application/json"
+            },
+        }
     );
-
-    const dir = `../../zk/${docID}`;
-    if (!fs.existsSync(dir)){
-        fs.mkdirSync(dir, { recursive: true });
-    }
-
-    fs.writeFileSync(`../../zk/${docID}/proof.json`,JSON.stringify(proof))
-    fs.writeFileSync(`../../zk/${docID}/publicInputSignals.json`,JSON.stringify(publicSignals))
-    console.log("Proof & publicInput Generated!");
+    const { message, proof } = await proofReq.json();
+    return proof;
 }
-
-// proof_generator().then(() => {
-//     process.exit(0);
-// });

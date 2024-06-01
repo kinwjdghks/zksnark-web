@@ -1,28 +1,20 @@
-const snarkjs = require("snarkjs");
-// const snarkjs = require("snarkjs");
-const fs = require("fs");
-const path = require("path");
+import { zkdoc } from "@/template/doc";
 
-async function verifier(docId:string) {
-    const baseDir = path.resolve(__dirname, `../../zk/${docId}`);
-    const proofFilePath = path.join(baseDir, "proof.json");
-    const publicInputFilePath = path.join(baseDir, "publicInputSignals.json");
-    const vKeyFilePath = path.resolve(__dirname, "reinforced-concrete/rc-circom/zkeyFiles/reinforcedConcreteTest/verification_key.json")
-
-    const vKey = JSON.parse(fs.readFileSync(vKeyFilePath));
-    const proof = JSON.parse(fs.readFileSync(proofFilePath));
-    const publicSignals = JSON.parse(fs.readFileSync(publicInputFilePath));
-
-    const res = await snarkjs.groth16.verify(vKey, publicSignals, proof);
-
-    if (res === true) {
-        console.log("Proof verified successfully");
-    } else {
-        console.log("Invalid proof");
-    }
-
+async function verify_proof(doc: zkdoc, proof: string) {
+    
+    const verifyReq = await fetch(
+        `http://localhost:3000/api/verify`,
+        {
+            method:"POST",
+            body: JSON.stringify({
+                proof: proof,
+                public: doc.public
+            }),
+            headers:{
+                "Content-Type":"application/json"
+            }
+        }
+    );
+    const { message } = await verifyReq.json();
+    return proof;
 }
-
-verifier("123123").then(() => {
-    process.exit(0);
-});

@@ -9,8 +9,5 @@
     "workspaces": [
         "rc-circom/"
     ],
-    "dependencies": {
-        "snarkjs": "^0.7.4"
-    },
-    "type":"module"
+    "type": "module"
 }

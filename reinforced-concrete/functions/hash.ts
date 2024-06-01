@@ -85,7 +85,7 @@ export const hashFile = async (filePath:string):Promise<string> => {
         {
             method:"GET",
             headers:{
-                "Context-Type":"application/json"
+                "Content-Type":"application/json"
             }
         }
     );

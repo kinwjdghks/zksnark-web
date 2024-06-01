@@ -6,7 +6,8 @@ import { fetchData } from "@/lib/functions/fetchData";
 
 const DocList = async ():Promise<ReactNode> => {
     const fetchData_ = () => fetchData();
-    const docs = await fetchData();
+    // const docs = await fetchData();
+    const docs = dummyDocs
     return <DocTable docs={docs} isLoading={false}/>
 }
 
