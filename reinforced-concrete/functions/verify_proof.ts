@@ -1,6 +1,6 @@
 import { zkdoc } from "@/template/doc";
 
-async function verify_proof(doc: zkdoc, proof: string) {
+export async function verify_proof(doc: zkdoc, proof: string) {
     
     const verifyReq = await fetch(
         `http://localhost:3000/api/verify`,
@@ -15,6 +15,7 @@ async function verify_proof(doc: zkdoc, proof: string) {
             }
         }
     );
-    const { message } = await verifyReq.json();
+    const { message, res } = await verifyReq.json();
+    console.log(res);
     return proof;
 }

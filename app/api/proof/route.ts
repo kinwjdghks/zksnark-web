@@ -22,9 +22,10 @@ export async function GET(req: NextRequest, res: NextResponse) {
     try{
       await snarkPromise(`snarkjs groth16 fullprove ${inputPath} ${wasmPath} ${zkeyPath} ${proofFilePath} ${publicFilePath}`);
       
-      const fileContent = fs.readFileSync(proofFilePath, 'utf-8');
-      console.log(fileContent);
-      return NextResponse.json({message: "prove successfully generated.", proof: fileContent })
+      const proof = fs.readFileSync(proofFilePath, 'utf-8');
+      const public_ = fs.readFileSync(publicFilePath, 'utf-8');
+      console.log(proof);
+      return NextResponse.json({message: "prove successfully generated.", proof: proof, public_: public_ })
     
     } catch (error) {
       return NextResponse.json({message: "prove generation failed."})

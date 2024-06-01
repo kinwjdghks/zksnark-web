@@ -11,11 +11,11 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
     const proofFilePath = path.join(process.cwd(), "temp", "proof.json");
     const publicFilePath = path.join(process.cwd(), "temp", "public.json");
-    const verificationKeyPath = path.join(process.cwd(),"reinforced-concrete","rc-circom","zkeyFiles","reinforcedConcreteTest","verification_key.zkey");
+    const verificationKeyPath = path.join(process.cwd(),"reinforced-concrete","rc-circom","zkeyFiles","reinforcedConcreteTest","verification_key.json");
     const snarkPromise = promisify(exec);
 
-    fs.writeFileSync(proofFilePath, Buffer.from(proof, 'utf-8'));
-    fs.writeFileSync(publicFilePath, Buffer.from(public_, 'utf-8'));
+    // fs.writeFileSync(proofFilePath, Buffer.from(proof, 'utf-8'));
+    // fs.writeFileSync(publicFilePath, Buffer.from(public_, 'utf-8'));
 
     try{
       const { stderr, stdout} = await snarkPromise(`snarkjs groth16 verify ${verificationKeyPath} ${publicFilePath} ${proofFilePath}`);

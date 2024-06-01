@@ -2,6 +2,8 @@
 import { createzkDoc, storeFile } from "@/lib/firebase/CRUD";
 import { generateProof } from "@/reinforced-concrete/functions/generate_proof";
 import { hashFile } from "@/reinforced-concrete/functions/hash";
+import { verify_proof } from "@/reinforced-concrete/functions/verify_proof";
+import { dummyDocs } from "@/template/doc";
 import { Button, Input } from "@nextui-org/react";
 import { saveAs } from "file-saver";
 import { ChangeEvent, ReactNode, useRef, useState } from "react";
@@ -39,22 +41,26 @@ const UploadPanel = (): ReactNode => {
     //hash the given document
     const hash = await hashFile(url);
 
-    //store document and the hash to the db
-    const uploadReq = await createzkDoc(title, file, url, hash);
-    if (!uploadReq) return;
-
+    
     // //create a proof for the given document
-
-    const proof = await generateProof("");
+    const { proof, public_} = await generateProof("");
     const fileName = `${file.name}-proof.json`;
     const fileType = "text";
     var blob = new Blob([proof], { type: fileType });
     saveAs(blob, `${file.name}-proof.json`);
+    
+    //store document and the hash to the db
+    const uploadReq = await createzkDoc(title, file, url, hash, public_);
+    if (!uploadReq) return;
 
     //clear inputs
     setTitle("");
     setFile(null);
   };
+
+  const testVerify = async () => {
+    verify_proof( dummyDocs[0], "");
+  }
 
   return (
     <>
@@ -72,6 +78,9 @@ const UploadPanel = (): ReactNode => {
       />
       <Button className="" onClick={handleUpload}>
         Upload Doc
+      </Button>
+      <Button className="" onClick={testVerify}>
+        Verify
       </Button>
     </>
   );

@@ -12,6 +12,6 @@ export const generateProof = async (docID: string) => {
             },
         }
     );
-    const { message, proof } = await proofReq.json();
-    return proof;
+    const { message, proof, public_ } = await proofReq.json();
+    return { proof, public_};
 }
