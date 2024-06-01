@@ -1,15 +1,12 @@
 const INITIAL_VECTOR = [BigInt(1), BigInt(2), BigInt(3)];
 
-// import snarkjs from 'snarkjs';
-import fs from 'fs';
-
 // Function to convert file to bytes
-const fileToBytes = (filePath) => {
+const fileToBytes = (filePath: string) => {
     return fs.readFileSync(filePath);
 }
 
 // Function to chunk bytes
-const chunkBytes = (bytes, chunkSize = 96) => {
+const chunkBytes = (bytes:Uint8Array, chunkSize = 96) => {
     const chunks = [];
     for (let i = 0; i < bytes.length; i += chunkSize) {
         chunks.push(bytes.slice(i, i + chunkSize));
@@ -18,7 +15,7 @@ const chunkBytes = (bytes, chunkSize = 96) => {
 }
 
 // Function to convert bytes to field elements
-const bytesToFieldElements = (bytes) => {
+const bytesToFieldElements = (bytes: Uint8Array) => {
     const fieldElements = [];
     for (let i = 0; i < bytes.length; i += 32) {
         let value = BigInt(0);
@@ -31,7 +28,7 @@ const bytesToFieldElements = (bytes) => {
 }
 
 // Placeholder for the reinforced concrete hash function
-const reinforcedConcreteHash = (state) => {
+const reinforcedConcreteHash = (state: BigInt[]): BigInt[] => {
     // Implement the reinforced concrete hash function as described
     // This function should use the bricks, concrete, and bars functions
     // to hash the given state
@@ -39,7 +36,7 @@ const reinforcedConcreteHash = (state) => {
 }
 
 // Function to hash a chunk
-const hashChunk = (chunk) => {
+const hashChunk = (chunk: Uint8Array) => {
     const fieldElements = bytesToFieldElements(chunk);
     while (fieldElements.length < 3) {
         fieldElements.push(BigInt(0)); // Padding if less than 3 elements
@@ -48,7 +45,7 @@ const hashChunk = (chunk) => {
 }
 
 // Function to combine hashes using a Merkle tree approach
-const combineHashes = (hashes) => {
+const combineHashes = (hashes: BigInt[][]): BigInt[] => {
     while (hashes.length > 1) {
         const newHashes = [];
         for (let i = 0; i < hashes.length; i += 2) {
@@ -64,12 +61,36 @@ const combineHashes = (hashes) => {
     return hashes[0];
 }
 
-// Function to hash a file using an initial vector
-export const hashFile = (filePath) => {
-    const bytes = fileToBytes(filePath);
-    const chunks = chunkBytes(bytes);
-    const initialHash = reinforcedConcreteHash(INITIAL_VECTOR); // Start with the initial vector
-    const hashes = chunks.map(chunk => hashChunk(chunk));
-    hashes.unshift(initialHash); // Include the initial hash in the combination process
-    return combineHashes(hashes);
+
+// export const hashFile = async (filePath:string):Promise<string|undefined> => {
+export const hashFile = async (filePath:string):Promise<string> => {
+    
+    //write bytes to a file named filePath
+    const writeFile = await fetch(
+        "http://localhost:3000/api/writeFile",
+        {
+            method:"POST",
+            headers:{
+                "Context-Type":"application/json"
+            },
+            body:JSON.stringify({
+                url:filePath
+            })
+        }
+    );
+
+    //read bytes and hash
+    const hashReq = await fetch(
+        "http://localhost:3000/api/hash",
+        {
+            method:"GET",
+            headers:{
+                "Context-Type":"application/json"
+            }
+        }
+    );
+
+    const { hash } = await hashReq.json();
+    // console.log(res)
+    return hash;
 }

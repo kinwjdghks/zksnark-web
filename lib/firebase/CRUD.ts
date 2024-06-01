@@ -5,6 +5,7 @@ import {
   updateDoc,
   doc,
   increment,
+  Timestamp,
 } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { db } from "./firebase.config";
@@ -16,20 +17,17 @@ const getCollectionRef = (collectionName: "zkdoc") =>
 export const getStorageRef = (refName: string) => ref(storage, refName);
 
 //Create
-const storeFile = async (file:File, hash:string):Promise<string|undefined> => {
+export const storeFile = async (file:File, fileName:string):Promise<string|undefined> => {
   try{
-    const fileRef = getStorageRef(hash);
+    const fileRef = getStorageRef(fileName);
     await uploadBytes(fileRef, file, { contentType: file.type });
-    return getDownloadURL(fileRef);
+    return await getDownloadURL(fileRef);
   } catch(error) {
     console.error(error);
   }
 }
 
-export const createzkDoc = async (title:string, file:File, hash:string):Promise<string|undefined> => {
-  const url = await storeFile(file, hash);
-  if(!url) return;
-
+export const createzkDoc = async (title:string, file:File, url:string, hash:string):Promise<string|undefined> => {
   let zkdoc:zkdoc = {
     title: title,
     hash: hash,
@@ -46,6 +44,19 @@ export const createzkDoc = async (title:string, file:File, hash:string):Promise<
 }
 
 //Read
+export const getAllzkDocs = async ():Promise<zkdoc[]> => {
+  const docs = await getDocs(getCollectionRef("zkdoc"));
+
+  const docList:zkdoc[] = docs.docs.map(doc => {
+    return {
+      title: doc.data().title,
+      timestamp: (doc.data().timestamp as Timestamp).toDate(),
+      hash: doc.data().hash,
+      url: ""
+  }});
+  // console.log(docList);
+  return docList;
+}
 
 
 //Delete

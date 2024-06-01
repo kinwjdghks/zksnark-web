@@ -12,3 +12,31 @@
 -e Zkey_SHA256SUM = "aaedbe8876cf497c232e9034b55aedec4ff9c078953e3818087eae5f8913dd7d"
 -e Verification_Key = "verification_key.json"
 -e Verification_Key_SHA256SUM = "59e1c3e7e6b588db4947f6fe6d40e73f7308dc6dfe7bd02620b910f9a3535974"
+-e 
+-e [Circuit_Build]
+-e Circom_Version = "circom compiler 2.1.9"
+-e GitHub_URL = "https://github.com/kinwjdghks/zksnark-web.git"
+-e Git_Commit = "74f8081"
+-e Compilation_Time = 1717171668
+-e 
+-e [Files]
+-e Wasm = "circuit.wasm"
+-e Wasm_SHA256SUM = "79425051be9075e004ea92c26a1c1d4947df7e86410534c18b6298a9a8410e5b"
+-e Zkey = "final.zkey"
+-e Zkey_SHA256SUM = "3b3c20608cce29654358e2d7ccdd5258a58e76daa079d55d9552940fb4d113d3"
+-e Verification_Key = "verification_key.json"
+-e Verification_Key_SHA256SUM = "cc0ddb6069bf05eb6a09963bbb0138ddd9a5feb72326b4c0239e4407d0aa37b1"
+-e 
+-e [Circuit_Build]
+-e Circom_Version = "circom compiler 2.1.9"
+-e GitHub_URL = "https://github.com/kinwjdghks/zksnark-web.git"
+-e Git_Commit = "74f8081"
+-e Compilation_Time = 1717174413
+-e 
+-e [Files]
+-e Wasm = "circuit.wasm"
+-e Wasm_SHA256SUM = "4b97ca3399545360742d191ce4459eccbcfb8130c679ecc3b3f4a549984fef65"
+-e Zkey = "final.zkey"
+-e Zkey_SHA256SUM = "4b55ea0af50379ac34cf28a2d82bfa305ecdcc3ab3fda4ae64a556fac2a030dd"
+-e Verification_Key = "verification_key.json"
+-e Verification_Key_SHA256SUM = "49f291876dc2e8071a1aa1978a8dafae2e98b9120086bcf6d24bed6c67dbc658"

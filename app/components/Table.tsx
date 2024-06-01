@@ -43,6 +43,8 @@ const DocTable = ({ docs, isLoading }: TableProps): ReactNode => {
             {new Date(date).toTimeString().slice(0, 8)}
           </p>
         );
+      case "hash":
+        return <p>{(cellValue as string).slice(0,20)}...</p>;
       default:
         return <p>{cellValue as string}</p>;
     }
@@ -77,7 +79,7 @@ const DocTable = ({ docs, isLoading }: TableProps): ReactNode => {
           className="h-16 text-[1.2rem] text-center">Title</TableColumn>
         <TableColumn 
           key="hash"
-          className="w-60 h-16 text-[1.2rem] text-center">Id</TableColumn>
+          className="w-60 h-16 text-[1.2rem] text-center">Hash</TableColumn>
       </TableHeader>
       <TableBody
         items={docs}

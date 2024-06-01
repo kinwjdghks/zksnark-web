@@ -1,21 +1,15 @@
 import { ReactNode } from "react";
 import DocTable from "./Table";
-import { dummyDocs } from "@/template/doc";
+import { dummyDocs, zkdoc } from "@/template/doc";
+import { getAllzkDocs } from "@/lib/firebase/CRUD";
+import { fetchData } from "@/lib/functions/fetchData";
 
-const DocList = async () => {
-    // const [isLoading,setIsLoading] = useState(true);
-    // const docs = await fetchData();
-    const docs = dummyDocs;
-    // useEffect(() => {
-    //     setIsLoading(false);
-    // },[docs])
-
+const DocList = async ():Promise<ReactNode> => {
+    const fetchData_ = () => fetchData();
+    const docs = await fetchData();
     return <DocTable docs={docs} isLoading={false}/>
 }
 
 
-async function fetchData() {
-    // return await getZKDocs();
-}
 
 export default DocList;

@@ -1,7 +1,8 @@
-const snarkjs = require("snarkjs");
-// const snarkjs = require("snarkjs");
-const fs = require("fs");
-const path = require("path");
+import * as snarkjs from "snarkjs";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+const __dirname = fileURLToPath(new URL(".", import.meta.url));
 
 async function verifier(docId) {
     const baseDir = path.resolve(__dirname, `../../zk/${docId}`);
@@ -24,6 +25,6 @@ async function verifier(docId) {
 
 }
 
-verifier("123123").then(() => {
+verifier("mydoc").then(() => {
     process.exit(0);
 });
