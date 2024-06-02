@@ -1,6 +1,9 @@
 import { zkdoc } from "@/template/doc";
 
 export async function verify_proof(doc: zkdoc, proof: string) {
+
+    console.log("proof:", typeof proof);
+    console.log("public:", typeof doc.public);
     
     const verifyReq = await fetch(
         `http://localhost:3000/api/verify`,
@@ -8,14 +11,13 @@ export async function verify_proof(doc: zkdoc, proof: string) {
             method:"POST",
             body: JSON.stringify({
                 proof: proof,
-                public: doc.public
+                public_: doc.public
             }),
             headers:{
                 "Content-Type":"application/json"
             }
         }
     );
-    const { message, res } = await verifyReq.json();
-    console.log(res);
-    return proof;
+    const { message, success } = await verifyReq.json();
+    return success == "true";
 }

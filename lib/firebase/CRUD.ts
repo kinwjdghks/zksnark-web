@@ -2,18 +2,17 @@ import {
   collection,
   getDocs,
   addDoc,
-  updateDoc,
   doc,
-  increment,
   Timestamp,
+  deleteDoc
 } from "firebase/firestore";
-import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, getStorage, ref, uploadBytes, deleteObject } from "firebase/storage";
 import { db } from "./firebase.config";
 import { zkdoc } from "@/template/doc";
 
 const storage = getStorage();
-const getCollectionRef = (collectionName: "zkdoc") =>
-  collection(db, collectionName);
+const getCollectionRef = (collectionName: "zkdoc") => collection(db, collectionName);
+const getDocRef = (id: string) => doc(db, "zkdoc", id);
 export const getStorageRef = (refName: string) => ref(storage, refName);
 
 //Create
@@ -27,7 +26,7 @@ export const storeFile = async (file:File, fileName:string):Promise<string|undef
   }
 }
 
-export const createzkDoc = async (title:string, file:File, url:string, hash:string, public_: string):Promise<string|undefined> => {
+export const createzkDoc = async (title:string, url:string, hash:string, public_: string):Promise<string|undefined> => {
   let zkdoc:zkdoc = {
     title: title,
     hash: hash,
@@ -50,10 +49,11 @@ export const getAllzkDocs = async ():Promise<zkdoc[]> => {
 
   const docList:zkdoc[] = docs.docs.map(doc => {
     return {
+      id: doc.id,
       title: doc.data().title,
       timestamp: (doc.data().timestamp as Timestamp).toDate(),
       hash: doc.data().hash,
-      url: "",
+      url: doc.data().url,
       public: doc.data().public
   }});
   // console.log(docList);
@@ -62,5 +62,8 @@ export const getAllzkDocs = async ():Promise<zkdoc[]> => {
 
 
 //Delete
+export const deletezkDoc = async (id: string) => await deleteDoc(getDocRef(id));
+
+export const deleteFile = async (refName: string) => await deleteObject(getStorageRef(refName));
 
 

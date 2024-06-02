@@ -89,9 +89,7 @@ export const hashFile = (filePath: string) => {
 // }
 
 export async function GET(req: NextApiRequest, res: NextApiResponse) {
-    console.log("Hash running...")
-    const filePath = path.join(process.cwd(), 'temp', 'fileToBytes.txt');
-    
+    console.log("Hash running...");
     const cProgramPath = path.join(process.cwd(), 'app','api','hash','hash.out');
     const sourcePath = path.join(process.cwd(), 'temp', 'fileToBytes.txt');
 

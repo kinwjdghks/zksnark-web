@@ -12,6 +12,7 @@ import {
   getKeyValue,
 } from "@nextui-org/react";
 import { Key, ReactNode, useMemo, useState } from "react";
+import ManageDoc from "./ManageDoc";
 
 type TableProps = {
   docs: zkdoc[];
@@ -26,7 +27,7 @@ const DocTable = ({ docs, isLoading }: TableProps): ReactNode => {
     return docs?.length ? Math.ceil(docs.length / rowsPerPage) : 0;
   }, [docs?.length, rowsPerPage]);
 
-  const loadingState = isLoading || docs?.length === 0 ? "loading" : "idle";
+  const loadingState = "idle";
 
   const renderCell = (
     doc: zkdoc,
@@ -45,6 +46,8 @@ const DocTable = ({ docs, isLoading }: TableProps): ReactNode => {
         );
       case "hash":
         return <p>{(cellValue as string).slice(0,20)}...</p>;
+      case "manage":
+        return <ManageDoc doc={doc}/>
       default:
         return <p>{cellValue as string}</p>;
     }
@@ -80,6 +83,9 @@ const DocTable = ({ docs, isLoading }: TableProps): ReactNode => {
         <TableColumn 
           key="hash"
           className="w-60 h-16 text-[1.2rem] text-center">Hash</TableColumn>
+        <TableColumn 
+          key="manage"
+          className="w-60 h-16 text-[1.2rem] text-center">Manage</TableColumn>
       </TableHeader>
       <TableBody
         items={docs}

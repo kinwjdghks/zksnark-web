@@ -1,5 +1,6 @@
 "use client";
 import { createzkDoc, storeFile } from "@/lib/firebase/CRUD";
+import { getFileName } from "@/lib/functions/fileName";
 import { generateProof } from "@/reinforced-concrete/functions/generate_proof";
 import { hashFile } from "@/reinforced-concrete/functions/hash";
 import { verify_proof } from "@/reinforced-concrete/functions/verify_proof";
@@ -28,29 +29,22 @@ const UploadPanel = (): ReactNode => {
       return;
     }
     const date = new Date();
-    const year = date.getFullYear().toString();
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const day = date.getDate().toString().padStart(2, "0");
-    const time = date.getTime().toString();
-    const timestamp = `${year}-${month}-${day}-${time}`;
 
     //store file to the storage and return url
-    const url = await storeFile(file, `/${title}-${timestamp}`);
+    const url = await storeFile(file, getFileName(date, title));
     if (!url) return;
 
     //hash the given document
     const hash = await hashFile(url);
 
-    
     // //create a proof for the given document
     const { proof, public_} = await generateProof("");
-    const fileName = `${file.name}-proof.json`;
     const fileType = "text";
-    var blob = new Blob([proof], { type: fileType });
-    saveAs(blob, `${file.name}-proof.json`);
+    var blob = new Blob([proof]);
+    saveAs(blob, `${file.name}-key.json`);
     
     //store document and the hash to the db
-    const uploadReq = await createzkDoc(title, file, url, hash, public_);
+    const uploadReq = await createzkDoc(title, url, hash, public_);
     if (!uploadReq) return;
 
     //clear inputs
