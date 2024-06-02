@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import fs from 'fs';
 export const dynamic = "force-dynamic"; // defaults to auto
 import path from "path";
+import { fetchAsBuffer } from "@/lib/functions/fetchAsBuffer";
 
 
 //get url and convert into bytes and write to a file.
@@ -14,20 +15,8 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "URL is required" });
         }
 
-        // Fetch the file from the URL
-        const response = await fetch(url);
-        if (!response.ok) {
-            return NextResponse.json({ error: "Failed to fetch the file from the URL" });
-        }
-
-        // Convert the response to an ArrayBuffer
-        const arrayBuffer = await response.arrayBuffer();
-
-        // Convert the ArrayBuffer to a Uint8Array
-        const uint8Array = new Uint8Array(arrayBuffer);
-
-        // Convert the Uint8Array to a Buffer
-        const buffer = Buffer.from(uint8Array);
+        const buffer = await fetchAsBuffer(url);
+        if(!buffer) return NextResponse.json({ error: "Failed to fetch the file from the URL" });
 
         // Define the file path to write the bytes to
         const filePath = path.join(process.cwd(), 'temp', 'fileToBytes.txt');
@@ -36,7 +25,7 @@ export async function POST(req: NextRequest) {
         fs.mkdirSync(path.dirname(filePath), { recursive: true });
 
         // Write the bytes to the file
-        fs.writeFileSync(filePath, buffer);
+        fs.writeFileSync(filePath, buffer as string | NodeJS.ArrayBufferView);
 
         // Send a success response
         return  NextResponse.json({ message: "File written successfully", filePath });

@@ -38,7 +38,11 @@ const UploadPanel = (): ReactNode => {
     const hash = await hashFile(url);
 
     // //create a proof for the given document
-    const { proof, public_} = await generateProof("");
+    const { proof, public_} = await generateProof(url);
+    if( !proof || !public_) {
+      console.log("something went wrong!");
+      return;
+    }
     const fileType = "text";
     var blob = new Blob([proof]);
     saveAs(blob, `${file.name}-key.json`);
@@ -51,10 +55,6 @@ const UploadPanel = (): ReactNode => {
     setTitle("");
     setFile(null);
   };
-
-  const testVerify = async () => {
-    verify_proof( dummyDocs[0], "");
-  }
 
   return (
     <>
@@ -72,9 +72,6 @@ const UploadPanel = (): ReactNode => {
       />
       <Button className="" onClick={handleUpload}>
         Upload Doc
-      </Button>
-      <Button className="" onClick={testVerify}>
-        Verify
       </Button>
     </>
   );
