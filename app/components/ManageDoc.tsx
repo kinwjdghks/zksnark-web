@@ -55,7 +55,7 @@ const ManageDoc = ({ doc }: ManageDocProps): ReactNode => {
       {!isOpened && <Button className={`${button_blue} `} onClick={()=>{setIsOpened(true)}}>
         문서 관리하기</Button>}
       
-      {isOpened && <div className="w-full my-2 h-24 flex flex-col justify-center">
+      {isOpened && <div className="w-full my-2 min-h-24 flex flex-col justify-center">
         <form
         typeof="file"
         name="proof"
@@ -76,7 +76,7 @@ const ManageDoc = ({ doc }: ManageDocProps): ReactNode => {
           />
         </label>
         {!isVerified && <p className="mt-2 text-stone-400 cursor-pointer hover:underline underline-offset-2" onClick={()=>setIsOpened(false)}>취소</p>}
-        <p className={`${message == MSG.fail && "text-red-500"} ${message == MSG.success && "text-blue-500"} h-8 m-2`}>{message}</p>
+        <p className={`${message == MSG.fail && "text-red-500 p-2"} ${message == MSG.success && "text-blue-500 p-2"}`}>{message}</p>
       </form>
         </div>}
       {isVerified && <div className="flex w-full justify-between px-6">

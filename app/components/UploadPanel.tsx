@@ -5,7 +5,7 @@ import { button_blue } from "@/public/style/buttonStyle";
 import { generateProof } from "@/reinforced-concrete/functions/generate_proof";
 import { hashFile } from "@/reinforced-concrete/functions/hash";
 import { verify_proof } from "@/reinforced-concrete/functions/verify_proof";
-import { dummyDocs } from "@/template/doc";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { Button, Input } from "@nextui-org/react";
 import { saveAs } from "file-saver";
 import { ChangeEvent, ReactNode, useRef, useState } from "react";
@@ -15,6 +15,7 @@ import { FiUpload } from "react-icons/fi";
 const UploadPanel = (): ReactNode => {
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState<string>("");
+  const [isLoading, setLoading] = useState<boolean>(false);
 
   const handleChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
     console.log("uploaded file:", e.target.files);
@@ -29,6 +30,7 @@ const UploadPanel = (): ReactNode => {
       console.log("no file uploaded!");
       return;
     }
+    setLoading(true);
     const date = new Date();
 
     //store file to the storage and return url
@@ -44,7 +46,6 @@ const UploadPanel = (): ReactNode => {
       console.log("something went wrong!");
       return;
     }
-    const fileType = "text";
     var blob = new Blob([proof]);
     saveAs(blob, `${file.name}-key.json`);
 
@@ -55,6 +56,8 @@ const UploadPanel = (): ReactNode => {
     //clear inputs
     setTitle("");
     setFile(null);
+    setLoading(false);
+    window.location.reload();
   };
 
   return (
@@ -78,7 +81,7 @@ const UploadPanel = (): ReactNode => {
             style={{ display: "none" }}
           />
         </label>
-        <p className="h-8 w-44 bg-[#f5f5f8] rounded-md my-4 p-1 pl-2">{file?.name}</p> 
+        <p className="min-h-8 w-44 bg-[#f5f5f8] rounded-md my-4 p-1 pl-2">{file?.name}</p> 
       </form>
       <Input
         className="w-44"
@@ -88,8 +91,12 @@ const UploadPanel = (): ReactNode => {
           setTitle(e.target.value)
         }
       />
-      <Button className="w-36 mt-16 border-3 border-solid border-[#7879B5] bg-white text-[#7879B5] font-bold hover:bg-[#7879B5] hover:text-white" onClick={handleUpload}>
-        업로드하기
+      <Button 
+        className="w-36 mt-16 border-3 border-solid border-[#7879B5] bg-white text-[#7879B5] font-bold hover:bg-[#7879B5] hover:text-white" 
+        onClick={handleUpload}>
+        {isLoading ? 
+        <AiOutlineLoading3Quarters className="w-6 h-6 animate-spin"/>
+        :"업로드하기"}
       </Button>
     </>
   );
