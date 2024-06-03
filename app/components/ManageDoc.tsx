@@ -1,9 +1,12 @@
 "use client";
 import { deleteData } from "@/lib/functions/deleteData";
 import { downLoadData } from "@/lib/functions/fetchData";
+import { button_blue, button_blue_rev } from "@/public/style/buttonStyle";
 import { verify_proof } from "@/reinforced-concrete/functions/verify_proof";
 import { zkdoc } from "@/template/doc";
+import { Button } from "@nextui-org/react";
 import { ChangeEvent, ReactNode, useState } from "react";
+import { FiUpload } from "react-icons/fi";
 
 type ManageDocProps = {
   doc: zkdoc;
@@ -14,6 +17,7 @@ const ManageDoc = ({ doc }: ManageDocProps): ReactNode => {
   const [isOpened, setIsOpened] = useState<boolean>(false);
   const [isVerified, setIsVerified] = useState<boolean>(false);
   const [message, setMessage] = useState<string>(MSG.default);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleDelete = async () => await deleteData(doc);
 
@@ -47,33 +51,47 @@ const ManageDoc = ({ doc }: ManageDocProps): ReactNode => {
 
 
   return (
-    <div>
-      <div className="w-full">
-        <p
-          className={`${isOpened == true && "underline"}`}
-          onClick={() => setIsOpened(prev => !prev)} >
-          Manage Document
-        </p>
-      </div>
-
-      {isOpened && <div className="w-full h-20 flex flex-col justify-center">
-        <p>.json 파일을 첨부해주세요.</p>
-        <input className="" type="file" onChange={(e:ChangeEvent<HTMLInputElement>) => handlefileInput(e)} />
-        <p className={`${message == MSG.fail && "text-red-500"} ${message == MSG.success && "text-blue-500"}`}>{message}</p>
+    <>
+      {!isOpened && <Button className={`${button_blue} `} onClick={()=>{setIsOpened(true)}}>
+        문서 관리하기</Button>}
+      
+      {isOpened && <div className="w-full my-2 h-24 flex flex-col justify-center">
+        <form
+        typeof="file"
+        name="proof"
+        encType="multipart/form-data"
+        className="flex flex-col items-center"
+      >
+        <label
+          htmlFor="proof-upload"
+          className={`${button_blue} flex flex-col mt-18 mb-18 p-4 px-4 rounded-2xl`}
+        >
+          <FiUpload className="flex flex-col" />
+          JSON 파일을 첨부하세요
+          <input
+            type="file"
+            id="proof-upload"
+            onChange={handlefileInput}
+            style={{ display: "none" }}
+          />
+        </label>
+        {!isVerified && <p className="mt-2 text-stone-400 cursor-pointer hover:underline underline-offset-2" onClick={()=>setIsOpened(false)}>취소</p>}
+        <p className={`${message == MSG.fail && "text-red-500"} ${message == MSG.success && "text-blue-500"} h-8 m-2`}>{message}</p>
+      </form>
         </div>}
-      {isVerified && <div className="flex w-full justify-between px-8">
+      {isVerified && <div className="flex w-full justify-between px-6">
         <p
-          className={`${isOpened == true && "underline"}`}
+          className={`${button_blue_rev} p-1 px-2 rounded-lg`}
           onClick={handleDownload} >
           Download
         </p>
         <p
-          className={`${isOpened == true && "underline"}`}
+          className={`${button_blue_rev} p-1 px-2 rounded-lg`}
           onClick={handleDelete} >
           Delete
         </p>
         </div>}
-    </div>
+    </>
   );
 };
 
