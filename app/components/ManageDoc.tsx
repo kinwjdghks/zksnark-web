@@ -18,13 +18,13 @@ const ManageDoc = ({ doc }: ManageDocProps): ReactNode => {
   const handleDelete = async () => await deleteData(doc);
 
   const handleDownload = async () => {
-    console.log(doc);
+    // console.log(doc);
     await downLoadData(doc.url, doc.title)};
 
   const handlefileInput = (e:ChangeEvent<HTMLInputElement>) => {
     if(e.target?.files && e.target.files[0]){
         const file = e.target.files[0];
-        console.log(file.type);
+        // console.log(file.type);
         if(file.type != "application/json"){
             setMessage(MSG.fileError);
             return;

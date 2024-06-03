@@ -20,7 +20,7 @@ else
 fi
 
 #define variables
-circuit_dir="../tests/"
+circuit_dir="../test"
 circuit_path=""
 circuit_type=""
 zkeydir="../zkeyFiles"

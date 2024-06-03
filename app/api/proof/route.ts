@@ -16,9 +16,11 @@ export async function GET(req: NextRequest, res: NextResponse) {
     console.log("read as buffer failed.");
     return;
   }
-  const { firstPart, secondPart } = parseState(buffer);
+  const { firstPart, secondPart, nonpadBitSize } = parseState(buffer);
   state1 = firstPart;
   state2 = secondPart;
+  console.log("state1: ",state1);
+  console.log("state2: ",state2);
 
   const inputPath = path.join(process.cwd(), "input.json");
   const wasmPath = path.join(
@@ -39,7 +41,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
   const proofFilePath = path.join(process.cwd(), "temp", "proof.json");
   const publicFilePath = path.join(process.cwd(), "temp", "public.json");
 
-  fs.writeFileSync(inputPath, JSON.stringify({ state: [state1, state2] }));
+  fs.writeFileSync(inputPath, JSON.stringify({ state: [state1, state2], nonpadBitSize:nonpadBitSize }));
 
   const snarkPromise = promisify(exec);
 

@@ -3,8 +3,6 @@ import { createzkDoc, storeFile } from "@/lib/firebase/CRUD";
 import { getFileName } from "@/lib/functions/fileName";
 import { generateProof } from "@/reinforced-concrete/functions/generate_proof";
 import { hashFile } from "@/reinforced-concrete/functions/hash";
-import { verify_proof } from "@/reinforced-concrete/functions/verify_proof";
-import { dummyDocs } from "@/template/doc";
 import { Button, Input } from "@nextui-org/react";
 import { saveAs } from "file-saver";
 import { ChangeEvent, ReactNode, useRef, useState } from "react";
