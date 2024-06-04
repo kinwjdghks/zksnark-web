@@ -50,7 +50,7 @@ const UploadPanel = (): ReactNode => {
     saveAs(blob, `${file.name}-key.json`);
 
     //store document and the hash to the db
-    const uploadReq = await createzkDoc(title, url, hash, public_);
+    const uploadReq = await createzkDoc(title, url, hash, public_, date);
     if (!uploadReq) return;
 
     //clear inputs

@@ -5,8 +5,9 @@ import { button_blue, button_blue_rev } from "@/public/style/buttonStyle";
 import { verify_proof } from "@/reinforced-concrete/functions/verify_proof";
 import { zkdoc } from "@/template/doc";
 import { Button } from "@nextui-org/react";
-import { ChangeEvent, ReactNode, useState } from "react";
+import { ChangeEvent, ReactNode, useEffect, useState } from "react";
 import { FiUpload } from "react-icons/fi";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 type ManageDocProps = {
   doc: zkdoc;
@@ -19,7 +20,10 @@ const ManageDoc = ({ doc }: ManageDocProps): ReactNode => {
   const [message, setMessage] = useState<string>(MSG.default);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleDelete = async () => await deleteData(doc);
+  const handleDelete = async () => {
+    await deleteData(doc);
+    window.location.reload();
+  }
 
   const handleDownload = async () => {
     // console.log(doc);
@@ -27,6 +31,7 @@ const ManageDoc = ({ doc }: ManageDocProps): ReactNode => {
 
   const handlefileInput = (e:ChangeEvent<HTMLInputElement>) => {
     if(e.target?.files && e.target.files[0]){
+        setIsLoading(true);
         const file = e.target.files[0];
         // console.log(file.type);
         if(file.type != "application/json"){
@@ -44,11 +49,13 @@ const ManageDoc = ({ doc }: ManageDocProps): ReactNode => {
                 setIsVerified(true);
             }
             else setMessage(MSG.fail);
+            setIsLoading(false);
         };
         reader.readAsText(file);
     }
   }
 
+  useEffect(()=>setMessage(MSG.default),[isOpened]);
 
   return (
     <>
@@ -62,19 +69,20 @@ const ManageDoc = ({ doc }: ManageDocProps): ReactNode => {
         encType="multipart/form-data"
         className="flex flex-col items-center"
       >
-        <label
+        {!isVerified && <label
           htmlFor="proof-upload"
           className={`${button_blue} flex flex-col mt-18 mb-18 p-4 px-4 rounded-2xl`}
         >
-          <FiUpload className="flex flex-col" />
-          JSON 파일을 첨부하세요
-          <input
+          {isLoading ? <AiOutlineLoading3Quarters className="w-6 h-6 mb-2 animate-spin"/>:
+          <FiUpload className="flex flex-col" />}
+          {isLoading ? "인증 중..." : "JSON 파일을 첨부하세요"}
+          {!isLoading && <input
             type="file"
             id="proof-upload"
             onChange={handlefileInput}
             style={{ display: "none" }}
-          />
-        </label>
+          />}
+        </label>}
         {!isVerified && <p className="mt-2 text-stone-400 cursor-pointer hover:underline underline-offset-2" onClick={()=>setIsOpened(false)}>취소</p>}
         <p className={`${message == MSG.fail && "text-red-500 p-2"} ${message == MSG.success && "text-blue-500 p-2"}`}>{message}</p>
       </form>

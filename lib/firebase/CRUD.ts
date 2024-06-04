@@ -26,12 +26,12 @@ export const storeFile = async (file:File, fileName:string):Promise<string|undef
   }
 }
 
-export const createzkDoc = async (title:string, url:string, hash:string, public_: string):Promise<string|undefined> => {
+export const createzkDoc = async (title:string, url:string, hash:string, public_: string, timeStamp: Date):Promise<string|undefined> => {
   let zkdoc:zkdoc = {
     title: title,
     hash: hash,
     url: url,
-    timestamp: new Date(),
+    timestamp: timeStamp,
     public: public_,
   }
 

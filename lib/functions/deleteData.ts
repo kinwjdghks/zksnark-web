@@ -4,5 +4,5 @@ import { getFileName } from "./fileName";
 
 export const deleteData = async (doc:zkdoc) => {
     await deletezkDoc(doc.id!);
-    await deleteFile(getFileName(new Date(doc.timestamp), doc.title));
+    await deleteFile(getFileName(doc.timestamp, doc.title));
 }
