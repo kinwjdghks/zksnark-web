@@ -36,6 +36,7 @@ const ManageDoc = ({ doc }: ManageDocProps): ReactNode => {
         // console.log(file.type);
         if(file.type != "application/json"){
             setMessage(MSG.fileError);
+            setIsLoading(false);
             return;
         }
         const reader = new FileReader();
@@ -83,7 +84,7 @@ const ManageDoc = ({ doc }: ManageDocProps): ReactNode => {
           />}
         </label>}
         {!isVerified && <p className="mt-2 text-stone-400 cursor-pointer hover:underline underline-offset-2" onClick={()=>setIsOpened(false)}>취소</p>}
-        <p className={`${message == MSG.fail && "text-red-500 p-2"} ${message == MSG.success && "text-blue-500 p-2"}`}>{message}</p>
+        <p className={`${message != MSG.success && "text-red-500 p-2"} ${message == MSG.success && "text-blue-500 p-2"}`}>{message}</p>
       </form>
         </div>}
       {isVerified && <div className="flex w-full justify-between px-6">

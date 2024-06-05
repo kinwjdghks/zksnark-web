@@ -55,7 +55,7 @@ export const getAllzkDocs = async ():Promise<zkdoc[]> => {
       url: doc.data().url
   }});
   // console.log(docList);
-  return docList;
+  return docList.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
 }
 
 

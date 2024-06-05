@@ -1,38 +1,4 @@
-
-// export const hashFile = async (filePath:string):Promise<string> => {
-    
-//     //write bytes to a file named filePath
-//     const writeFile = await fetch(
-//         "http://localhost:3000/api/writeFile",
-//         {
-//             method:"POST",
-//             headers:{
-//                 "Context-Type":"application/json"
-//             },
-//             body:JSON.stringify({
-//                 url:filePath
-//             })
-//         }
-//     );
-
-//     //read bytes and hash
-//     const hashReq = await fetch(
-//         "http://localhost:3000/api/hash",
-//         {
-//             method:"GET",
-//             headers:{
-//                 "Content-Type":"application/json"
-//             }
-//         }
-//     );
-
-//     const { hash } = await hashReq.json();
-//     // console.log(res)
-//     return hash;
-// }
-
 import BigNumber from "bignumber.js";
-
 export const PRIME = BigNumber('21888242871839275222246405745257275088548364400416034343698204186575808495617');
 
 class RC_C {
@@ -241,14 +207,13 @@ class ReinforcedConcretePermutation {
             currentState = this.bricks.transform(currentState);
             currentState = this.concrete.transform(currentState, i * 3);
         }
-
         return currentState;
     }
 }
 
 export class ReinforcedConcreteHash {
     private Permutation = new ReinforcedConcretePermutation();
-
+    
     private permutation(input: BigNumber[]): BigNumber[] {
         return this.Permutation.transform(input);
     }
@@ -265,10 +230,11 @@ export class ReinforcedConcreteHash {
         return output[0];
     }
 
-    public hash(chunks: string[], nonpadBitSize:number) {
+    public hash(chunks: string[], nonpadBitSize:number):string {
         const chunk1 = BigNumber(chunks[0]);
         const chunk2 = BigNumber(chunks[1]);
-        return this.permutation([chunk1, chunk2, BigNumber(nonpadBitSize)])[0];
+        const output = this.permutation([chunk1, chunk2, BigNumber(nonpadBitSize)]);
+        return output[0].toString(10);
     }
 
 }

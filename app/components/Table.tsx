@@ -13,13 +13,15 @@ import {
 } from "@nextui-org/react";
 import { Key, ReactNode, useMemo, useState } from "react";
 import ManageDoc from "./ManageDoc";
+import { decimalToHex } from "@/lib/functions/decimalToHex";
+import { button_blue } from "@/public/style/buttonStyle";
 
 type TableProps = {
   docs: zkdoc[];
   isLoading: boolean;
 };
 
-const DocTable = ({ docs, isLoading }: TableProps): ReactNode => {
+const DocTable = ({ docs, isLoading }: TableProps):ReactNode => {
   const rowsPerPage = 10;
   const [page, setPage] = useState<number>(1);
 
@@ -44,7 +46,9 @@ const DocTable = ({ docs, isLoading }: TableProps): ReactNode => {
           </p>
         );
       case "hash":
-        return <p>{(cellValue as string).slice(0,20)}...</p>;
+        return <div>{decimalToHex(cellValue as string).slice(0,20)}...
+          <div className={`${button_blue} absolute z-10 top-0 w-full overflow-hidden p-1 rounded-lg opacity-0 hover:opacity-100 hover:w-fit hover:-left-[10rem]`}>{decimalToHex(cellValue as string)}</div>
+        </div>;
       case "manage":
         return <ManageDoc doc={doc}/>
       default:
@@ -70,7 +74,6 @@ const DocTable = ({ docs, isLoading }: TableProps): ReactNode => {
           </div>
         ) : null
       }
-      //   {...args}
     >
       <TableHeader>
         <TableColumn 

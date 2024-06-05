@@ -19,12 +19,12 @@ export async function GET(req: NextRequest, res: NextResponse) {
     return;
   }
   const { chunks, nonpadBitSize } = parseState(buffer);
-  // console.log("chunks: ",chunks);
-  // console.log("nonpadBitSize: ",nonpadBitSize);
-  const myHash = new ReinforcedConcreteHash().hash(chunks, nonpadBitSize).toString(10);
-  console.log("myHash:", myHash);
   state1 = chunks[0];
   state2 = chunks[1];
+  console.log("chunks: ",chunks);
+  // console.log("nonpadBitSize: ",nonpadBitSize);
+  const myHash = new ReinforcedConcreteHash().hash(chunks, nonpadBitSize);
+  console.log("myHash:", myHash);
 
   const inputPath = path.join(process.cwd(), "temp", "input.json");
   const wasmPath = path.join(

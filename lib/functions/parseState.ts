@@ -10,11 +10,15 @@ export const parseState = (buffer: ArrayBuffer) => {
 
     const nonpadBitSize = binaryString.length;
     console.log("nonpadBitSize: %d",nonpadBitSize);
-    // Pad the input with zeros to make it multiple of 2*BITRATE bits
-    while (binaryString.length % BITRATE == 0) {
+    // Pad the input with zeros to make it multiple of BITRATE bits
+    console.log("binaryString.length: ",binaryString.length);
+    console.log("BITRATE: ",BITRATE);
+    console.log("binaryString.length % BITRATE: ",binaryString.length % BITRATE);
+
+    while (binaryString.length % BITRATE !== 0) {
         binaryString = '0' + binaryString;
     }
-
+    console.log("binaryString: ",binaryString);
     // Split the input into two 254-bit strings
     const chunks:string[] = [];
     for (let i = 0; i < binaryString.length; i += BITRATEh) {

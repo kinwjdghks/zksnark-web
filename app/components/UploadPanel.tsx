@@ -57,6 +57,7 @@ const UploadPanel = (): ReactNode => {
     setTitle("");
     setFile(null);
     setLoading(false);
+    if(window) window.location.reload();
   };
 
   return (
