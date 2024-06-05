@@ -48,8 +48,8 @@ zkSNARK는 세 가지 과정을 통해 이루어집니다.
 $ git clone https://github.com/kinwjdghks/zksnark-web
 
 2. dependency 설치</br>
-$ npm i -g snarkjs
-$ npm i
+$ npm i -g snarkjs</br>
+$ npm i</br>
 $ npm run install-rc
 
 4. google firebase project 생성</br>
