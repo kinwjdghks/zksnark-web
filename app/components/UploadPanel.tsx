@@ -16,7 +16,7 @@ const UploadPanel = (): ReactNode => {
   const [isLoading, setLoading] = useState<boolean>(false);
 
   const handleChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log("uploaded file:", e.target.files);
+    // console.log("uploaded file:", e.target.files);
     if (!e.target.files) return;
     setFile(e.target.files[0]);
   };
@@ -43,11 +43,11 @@ const UploadPanel = (): ReactNode => {
     saveAs(blob, `${file.name}-key.json`);
 
     //store document and the hash to the db
-    console.log("doc: ",{
-      title:title,
-      url:url,
-      hash: public_,
-    });
+    // console.log("doc: ",{
+    //   title:title,
+    //   url:url,
+    //   hash: public_,
+    // });
 
     const uploadReq = await createzkDoc(title, url, public_, date);
     if (!uploadReq) return;

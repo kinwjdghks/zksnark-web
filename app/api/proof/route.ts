@@ -24,7 +24,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
   console.log("chunks: ",chunks);
   // console.log("nonpadBitSize: ",nonpadBitSize);
   const myHash = new ReinforcedConcreteHash().hash(chunks, nonpadBitSize);
-  console.log("myHash:", myHash);
+  // console.log("myHash:", myHash);
 
   const inputPath = path.join(process.cwd(), "temp", "input.json");
   const wasmPath = path.join(
