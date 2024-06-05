@@ -118,3 +118,7 @@ database에는 문서 identifier, 문서 이름, 해시값(public), 문서가 �
 ```
 특정 document에 대해, db에서 가져온 해시값(public), 사용자가 첨부한 proof, 그리고 verification key를 이용해 유효햔 proof인지 판단합니다.
 
+## 스크린샷
+
+<img width="900" alt="스크린샷1" src="https://github.com/kinwjdghks/zksnark-web/assets/61329322/8f96b8b5-99f0-462c-a876-8e56ee08fd91">
+<img width="900" alt="스크린샷2" src="https://github.com/kinwjdghks/zksnark-web/assets/61329322/562cb6ad-4f4a-4ace-b6de-99e0cf0380f9">
