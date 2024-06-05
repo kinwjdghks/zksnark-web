@@ -48,12 +48,14 @@ zkSNARK는 세 가지 과정을 통해 이루어집니다.
 $ git clone https://github.com/kinwjdghks/zksnark-web
 
 2. dependency 설치</br>
-$ npm run install-all (이 단계에서 key generation도 함께 수행됩니다.)
+$ npm i -g snarkjs
+$ npm i
+$ npm run install-rc
 
-3. google firebase project 생성</br>
+4. google firebase project 생성</br>
 https://console.firebase.google.com/u/0/?hl=ko
 
-4. 환경변수 생성</br>
+5. 환경변수 생성</br>
 생성한 firebase configuation을 복사하여 하단에 붙여넣고, 루트 경로에 내용을 .env.local 이름의 파일에 저장
 
 NEXT_PUBLIC_FIREBASE_APIKEY=</br>
