@@ -3,7 +3,6 @@ import { createzkDoc, storeFile } from "@/lib/firebase/CRUD";
 import { getFileName } from "@/lib/functions/fileName";
 import { button_blue } from "@/public/style/buttonStyle";
 import { generateProof } from "@/reinforced-concrete/functions/generate_proof";
-import { ReinforcedConcreteHash } from "@/reinforced-concrete/functions/hash";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { Button, Input } from "@nextui-org/react";
 import { saveAs } from "file-saver";

@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "install-root": "npm install",
+    "install-rc": "cd reinforced-concrete/rc-circom && npm install",
+    "install-all": "npm-run-all install-root install-rc"
+    
   },
   "dependencies": {
     "@nextui-org/react": "^2.4.0",
@@ -28,6 +32,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "npm-run-all": "^4.1.5",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
