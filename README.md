@@ -68,7 +68,7 @@ $ npm run dev
 
 ## 핵심 코드 설명
 
-###api/proof/route.ts
+### api/proof/route.ts
 ```javascript
   const url = req.nextUrl.searchParams.get("url") as string;
   const buffer = await fetchAsBuffer(url);
@@ -101,7 +101,7 @@ $ npm run dev
 snarkjs groth16 프로토콜을 사용하여 proof를 생성합니다. 이 때 input에 대한 해시 결과인 public output은 직접 구현한 해시값과 값이 같으므로 대체합니다.</br>
 database에는 문서 identifier, 문서 이름, 해시값(public), 문서가 저장된 storage url만이 저장됩니다. 
 
-###api/verify/route.ts
+### api/verify/route.ts
 ```javascript
     const snarkPromise = promisify(exec);
     const publicJSON = JSON.stringify([public_]);
