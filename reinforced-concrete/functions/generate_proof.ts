@@ -1,6 +1,8 @@
-export const generateProof = async (url: string) => {
+import { baseUrl } from "@/lib/functions/dynamicURL";
 
-  const proofReq = await fetch(`http://localhost:3000/api/proof?url=${url}`, {
+export const generateProof = async (url: string) => {
+  
+  const proofReq = await fetch(`${baseUrl}/api/proof?url=${url}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
