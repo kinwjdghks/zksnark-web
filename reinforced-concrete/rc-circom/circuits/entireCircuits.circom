@@ -1,7 +1,9 @@
 pragma circom 2.1.0;
 
-// pulled from the implementation
-// https://extgit.iaik.tugraz.at/krypto/zkfriendlyhashzoo/-/blob/33fe9952682eca1337ac7f947b9ebe366faeda9c/plain_impls/src/reinforced_concrete/reinforced_concrete.rs
+include "./decompose.circom";
+include "./compose.circom";
+include "./params.circom";
+include "../../node_modules/circomlib/circuits/comparators.circom";
 
 template RC_C(x)  {
 	signal output out;
@@ -745,4 +747,181 @@ function SBOX(i) {
         682
     ];
     return lut[i];
+}
+
+template sbox() {
+    signal input state[3][27];
+    signal output outState[3][27];
+
+    for(var i=0; i<3; i++) {
+        for(var j=0; j<27; j++) {
+            outState[i][j] <-- SBOX(state[i][j]);
+        }
+    }
+}
+
+template Bars() {
+    signal input state[3];
+    signal output outState[3];
+
+    // decompose
+    component decompose = Decompose();
+    decompose.state <== state;
+
+    component sbox = sbox();
+    sbox.state <== decompose.outState;
+
+    component compose = Compose();
+    compose.state <== sbox.outState;
+
+    outState <== compose.outState;
+}
+
+template Bricks() {
+    signal input state[3]; //s_0, s_1, s_2
+    signal output outState[3];
+    signal intermediateState[3];
+
+    signal s0_sq <== state[0] * state[0]; 
+    signal s0_sq_sq <== s0_sq * s0_sq; 
+    signal s0_out <== s0_sq_sq * state[0];
+    signal s1_sq <== state[1] * state[1];
+
+    //BN256
+    intermediateState[0] <== s0_out;
+    intermediateState[1] <== ((s0_sq + state[0]) + 2) * state[1]; //alpha_1 = 1, beta_1 = 2
+    intermediateState[2] <== (s1_sq + (3 * state[1]) + 4) * state[2]; //alpha_2 = 3, beta_2 = 4
+
+    outState <== intermediateState;
+}
+
+ template Compose(){
+	signal input state[3][27];
+	signal output outState[3]; 
+
+	component si = SI();
+	signal repr[3][53];
+
+	for (var j=0; j<3; j++ ){
+		repr[j][0] <== state[j][0];
+
+		for (var i = 1; i<27; i++){
+			repr[j][2*i-1] <== repr[j][2*i-2] * si.out[i];
+			repr[j][2*i] <== repr[j][2*i-1] + state[j][i];
+		}
+
+		outState[j] <== repr[j][52];
+	}
+ }
+
+template Concrete(i) {
+	signal input state[3];
+	signal output outState[3];
+
+	component rcConstantA = RC_C(i);
+	component rcConstantB = RC_C(i+1);
+	component rcConstantC = RC_C(i+2);
+
+	signal sum <== state[0] + state[1] + state[2]; 
+
+	outState[0] <== sum + state[0] + rcConstantA.out;
+	outState[1] <== sum + state[1] + rcConstantB.out;
+	outState[2] <== sum + state[2] + rcConstantC.out;
+
+}
+template DecomposeElement() {
+    signal input state;
+    signal output outState[27];
+
+    signal divisors[27] <== DIVISORS();
+    signal remainders[27];
+    signal rangeChecks[27];
+    signal quotients[27];
+
+    quotients[26] <-- state \ divisors[26];
+    remainders[26] <-- state % divisors[26];
+    outState[26] <== remainders[26];
+    quotients[26] * divisors[26] + remainders[26] === state;
+    remainders[26] === state - quotients[26] * divisors[26];
+    rangeChecks[0] <== LessThan(10)([remainders[26], divisors[26]]);
+    rangeChecks[0] === 1;
+
+
+    for(var i=25; i>=0; i--) {
+        if (i == 0) {
+            outState[0] <== quotients[i + 1];
+        } else {
+            quotients[i] <-- quotients[i + 1] \ divisors[i];
+            remainders[i] <-- quotients[i + 1] % divisors[i];
+            outState[i] <== remainders[i];
+            quotients[i] * divisors[i] + remainders[i] === quotients[i + 1];
+        }
+    }
+
+    for(var i = 1; i<27; i++) {
+            // all divisors are 10 bits
+            // TODO: check if this is really necessary given that 
+            // the remainder will always < divisor, for a dividend
+            // that a user cannot derive
+            rangeChecks[i] <== LessThan(10)([remainders[i], divisors[i]]);
+            rangeChecks[i] === 1;
+    }
+}
+
+template Decompose() {
+    signal input state[3];
+    signal output outState[3][27];
+
+    for(var i=0; i<3; i++) {
+        outState[i] <== DecomposeElement()(state[i]);
+    }
+}
+
+
+template ReinforcedConcretePermutation() {
+    signal input state[3];
+    signal output hash[3];
+
+    component bricks[8];
+    component concrete[8];
+
+    concrete[0] = Concrete(0);
+    concrete[0].state <== state;
+
+    for(var i=1; i<=3; i++) {
+        bricks[i] = Bricks();
+        bricks[i].state <== concrete[i - 1].outState;
+
+        concrete[i] = Concrete(i * 3);
+        concrete[i].state <== bricks[i].outState;
+    }
+
+    component bars = Bars();
+    bars.state <== concrete[3].outState;
+
+    concrete[4] = Concrete(12);
+    concrete[4].state <== bars.outState;
+
+    for(var i=5; i<=7; i++) {
+        bricks[i] = Bricks();
+        bricks[i].state <== concrete[i - 1].outState;
+
+        concrete[i] = Concrete(i * 3);
+        concrete[i].state <== bricks[i].outState;
+    }
+
+    hash <== concrete[7].outState;
+}
+
+template ReinforcedConcreteHash() {
+    signal input state[2];
+    signal input nonpadBitSize;
+    signal output hash;
+
+    component rc = ReinforcedConcretePermutation();
+    rc.state[0] <== state[0];
+    rc.state[1] <== state[1];
+    rc.state[2] <== nonpadBitSize;
+
+    hash <== rc.hash[0];
 }

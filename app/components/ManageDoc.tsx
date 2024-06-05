@@ -39,7 +39,6 @@ const ManageDoc = ({ doc }: ManageDocProps): ReactNode => {
             return;
         }
         const reader = new FileReader();
-
         let proofString:string;
         reader.onload = async function(e) {
             proofString = e.target?.result as string;

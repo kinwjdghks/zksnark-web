@@ -3,12 +3,11 @@ import { createzkDoc, storeFile } from "@/lib/firebase/CRUD";
 import { getFileName } from "@/lib/functions/fileName";
 import { button_blue } from "@/public/style/buttonStyle";
 import { generateProof } from "@/reinforced-concrete/functions/generate_proof";
-import { hashFile } from "@/reinforced-concrete/functions/hash";
-import { verify_proof } from "@/reinforced-concrete/functions/verify_proof";
+import { ReinforcedConcreteHash } from "@/reinforced-concrete/functions/hash";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { Button, Input } from "@nextui-org/react";
 import { saveAs } from "file-saver";
-import { ChangeEvent, ReactNode, useRef, useState } from "react";
+import { ChangeEvent, ReactNode, useState } from "react";
 import { FiUpload } from "react-icons/fi";
 // import fs from 'fs';
 
@@ -21,8 +20,6 @@ const UploadPanel = (): ReactNode => {
     console.log("uploaded file:", e.target.files);
     if (!e.target.files) return;
     setFile(e.target.files[0]);
-
-    // setFileValue(e.target.files[0].name);
   };
 
   const handleUpload = async () => {
@@ -37,9 +34,6 @@ const UploadPanel = (): ReactNode => {
     const url = await storeFile(file, getFileName(date, title));
     if (!url) return;
 
-    //hash the given document
-    const hash = await hashFile(url);
-
     // //create a proof for the given document
     const { proof, public_ } = await generateProof(url);
     if (!proof || !public_) {
@@ -50,14 +44,19 @@ const UploadPanel = (): ReactNode => {
     saveAs(blob, `${file.name}-key.json`);
 
     //store document and the hash to the db
-    const uploadReq = await createzkDoc(title, url, hash, public_, date);
+    console.log("doc: ",{
+      title:title,
+      url:url,
+      hash: public_,
+    });
+
+    const uploadReq = await createzkDoc(title, url, public_, date);
     if (!uploadReq) return;
 
     //clear inputs
     setTitle("");
     setFile(null);
     setLoading(false);
-    window.location.reload();
   };
 
   return (
@@ -93,7 +92,8 @@ const UploadPanel = (): ReactNode => {
       />
       <Button 
         className="w-36 mt-16 border-3 border-solid border-[#7879B5] bg-white text-[#7879B5] font-bold hover:bg-[#7879B5] hover:text-white" 
-        onClick={handleUpload}>
+        onClick={handleUpload}
+        isDisabled={isLoading}>
         {isLoading ? 
         <AiOutlineLoading3Quarters className="w-6 h-6 animate-spin"/>
         :"업로드하기"}

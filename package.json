@@ -14,6 +14,7 @@
     "@types/filesystem": "^0.0.36",
     "@types/firebase": "^3.2.1",
     "@types/snarkjs": "^0.7.8",
+    "bignumber.js": "^9.1.2",
     "file-saver": "^2.0.5",
     "next": "14.2.3",
     "react": "^18",

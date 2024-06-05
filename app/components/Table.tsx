@@ -39,9 +39,8 @@ const DocTable = ({ docs, isLoading }: TableProps): ReactNode => {
       case "timestamp":
         const date = cellValue as Date;
         return (
-          <p className="w-full text-center">
-            {new Date(date).toDateString() + "\n"}
-            {new Date(date).toTimeString().slice(0, 8)}
+          <p className="w-full text-center" suppressHydrationWarning>
+             {date.toDateString() +" "+ date.toTimeString().slice(0, 8)}
           </p>
         );
       case "hash":
