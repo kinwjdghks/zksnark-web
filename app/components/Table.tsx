@@ -11,7 +11,7 @@ import {
   TableRow,
   getKeyValue,
 } from "@nextui-org/react";
-import { Key, ReactNode, useMemo, useState } from "react";
+import { Key, ReactNode, useState } from "react";
 import ManageDoc from "./ManageDoc";
 import { decimalToHex } from "@/lib/functions/decimalToHex";
 import { button_blue } from "@/public/style/buttonStyle";
@@ -22,13 +22,6 @@ type TableProps = {
 };
 
 const DocTable = ({ docs, isLoading }: TableProps):ReactNode => {
-  const rowsPerPage = 10;
-  const [page, setPage] = useState<number>(1);
-
-  const pages = useMemo(() => {
-    return docs?.length ? Math.ceil(docs.length / rowsPerPage) : 0;
-  }, [docs?.length, rowsPerPage]);
-
   const loadingState = "idle";
 
   const renderCell = (
@@ -57,24 +50,7 @@ const DocTable = ({ docs, isLoading }: TableProps):ReactNode => {
   };
 
   return (
-    <Table
-      aria-label="zk Docs List"
-      bottomContent={
-        pages > 0 ? (
-          <div className="flex w-full justify-center">
-            <Pagination
-              isCompact
-              showControls
-              showShadow
-              color="primary"
-              page={page}
-              total={pages}
-              onChange={(page) => setPage(page)}
-            />
-          </div>
-        ) : null
-      }
-    >
+    <Table aria-label="zk Docs List" className="h-full" isHeaderSticky >
       <TableHeader>
         <TableColumn 
           key="timestamp"
