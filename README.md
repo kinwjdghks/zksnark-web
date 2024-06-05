@@ -32,12 +32,33 @@ zkSNARK는 세 가지 과정을 통해 이루어집니다.
 
 ## 사용 방법
 
-# 키 생성(1단계)는 미리 되어있으며, 사용자가 문서를 업로드할 때 업로드와 동시에 json형식의 증명서가 생성됩니다. 생성된 증명은 사용자의 컴퓨터에 저장되며 문서 대신에 안전한 곳에 보관해야 합니다.
+# 사용자가 문서를 업로드하면 업로드와 동시에 json형식의 증명서가 생성됩니다. 생성된 증명은 사용자의 컴퓨터에 저장되며 문서 대신에 안전한 곳에 보관해야 합니다.
 
 # 저장한 문서를 다시 내려받거나 데이터베이스에서 삭제하고 싶을 때, 증명서를 해당 문서의 첨부란에 첨부하면 증명 검증이 이루어집니다. 검증이 성공하면 삭제/다운로드가 가능하며 실패하면 문서에 접근할 수 없습니다.
 
-## 실행 방법
 
+## 프로젝트 실행 방법
 
+1. 깃 레포지토리 clone
+$ git clone https://github.com/kinwjdghks/zksnark-web
 
+2. dependency 설치
+$ npm run install-all (이 단계에서 key generation도 함께 수행됩니다.)
 
+3. google firebase project 생성
+https://console.firebase.google.com/u/0/?hl=ko
+
+4. 환경변수 생성
+생성한 firebase configuation을 복사하여 하단에 붙여넣고, 루트 경로에 내용을 .env.local 이름의 파일에 저장
+
+NEXT_PUBLIC_FIREBASE_APIKEY=
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+NEXT_PUBLIC_FIREBASE_PROJECTID=
+NEXT_PUBLIC_FIREBASE_STORAGEBUCKET=
+NEXT_PUBLIC_FIREBASE_MESSAGINGSENDERID=
+NEXT_PUBLIC_FIREBASE_APPID=
+
+5. next app 실행
+$ npm run dev
+
+## 핵심 코드 설명
