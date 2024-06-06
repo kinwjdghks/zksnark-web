@@ -22,13 +22,13 @@
 
 zkSNARK는 세 가지 과정을 통해 이루어집니다.
 
-1. 키 생성 단계
+1. 키 생성 단계</br>
 이 단계는 특정 함수에 대해 한 번만 이루어지며, program code(또는 circuit)와 random secret parameter를 이용해 proving key와 verification key를 만들어냅니다.
 
-2. 증명 생성 단계
+2. 증명 생성 단계</br>
 이 단계는 증명자(prover)가 수행하며, proving key, public input, private input(witness)를 이용해 proof를 생성합니다.
 
-3. 증명 검증 단계
+3. 증명 검증 단계</br>
 이 단계는 검증자(verifier)가 수행하며, verification key, public input, proof를 이용해 참/거짓을 판별합니다.
 
 본 프로젝트는 zkSNARK-friendly한 reinforced-concrete 해쉬 함수[1]을 사용하여 개발했습니다. 
