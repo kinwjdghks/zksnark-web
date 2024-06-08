@@ -4,10 +4,11 @@ include "./bricks.circom";
 include "./concrete.circom";
 include "./bars.circom";
 
-template ReinforcedConcretePermutation() {
+template ReinforcedConcretePermutation(ii) {
     signal input state[3];
     signal output hash[3];
-
+    var i = ii;
+    
     component bricks[8];
     component concrete[8];
 
@@ -37,19 +38,32 @@ template ReinforcedConcretePermutation() {
     }
 
     hash <== concrete[7].outState;
+    
 }
 
 template ReinforcedConcreteHash() {
-    signal input state[2];
+    var max = 100;
+    signal input state[max][2];
     signal input nonpadBitSize;
     signal output hash;
 
-    component rc = ReinforcedConcretePermutation();
-    rc.state[0] <== state[0];
-    rc.state[1] <== state[1];
-    rc.state[2] <== nonpadBitSize;
+    signal stateBuffer[3];
+    stateBuffer[0] <== state[0][0];
+    stateBuffer[1] <== state[0][1];
+    stateBuffer[2] <== nonpadBitSize;
 
-    hash <== rc.hash[0];
+    component rc[max];
+    rc[0] = ReinforcedConcretePermutation(0);
+    rc[0].state[0] <== stateBuffer[0];
+    rc[0].state[1] <== stateBuffer[1];
+    rc[0].state[2] <== stateBuffer[2];
+
+    for (var i = 1; i < max; i++) {
+        rc[i] = ReinforcedConcretePermutation(i);
+        rc[i].state[0] <== rc[i-1].hash[0] + state[i][0];
+        rc[i].state[1] <== rc[i-1].hash[1] + state[i][1];
+        rc[i].state[2] <== rc[i-1].hash[2];
+    }
+
+    hash <== rc[max-1].hash[0];
 }
-
-//TODO: iterate rounds

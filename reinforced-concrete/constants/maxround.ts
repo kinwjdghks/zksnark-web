@@ -1,0 +1,1 @@
+export const MAX_ROUND = 100;

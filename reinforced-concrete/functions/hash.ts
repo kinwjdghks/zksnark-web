@@ -1,4 +1,5 @@
 import BigNumber from "bignumber.js";
+import { MAX_ROUND } from "../constants/maxround";
 export const PRIME = BigNumber('21888242871839275222246405745257275088548364400416034343698204186575808495617');
 
 class RC_C {
@@ -212,30 +213,30 @@ class ReinforcedConcretePermutation {
 }
 
 export class ReinforcedConcreteHash {
-    private Permutation = new ReinforcedConcretePermutation();
     
     private permutation(input: BigNumber[]): BigNumber[] {
-        return this.Permutation.transform(input);
+        const permutation = new ReinforcedConcretePermutation();
+        return permutation.transform(input);
     }
 
-    public spongeHash(chunks: string[], nonpadBitSize: number) {
-        var output: BigNumber[] = [];
-        for (var i=0; i<chunks.length; i+=2){
-            const chunk1 = BigNumber(chunks[i]);
-            const chunk2 = BigNumber(chunks[i + 1]);
-            const thirdInput = i == 0 ? BigNumber(nonpadBitSize) : output[2];
-            const input = [chunk1, chunk2, thirdInput];
-            output = this.permutation(input);
+    public spongeHash(chunks: string[][], nonpadBitSize: number) {
+        let stateBuffer= [BigNumber(chunks[0][0]), BigNumber(chunks[0][1]), BigNumber(nonpadBitSize)];
+        let rc:BigNumber[][] = [];
+        rc[0] = this.permutation(stateBuffer);
+
+        for (let i=1; i < MAX_ROUND; i++){
+            stateBuffer = [ rc[i - 1][0].plus(chunks[i][0]), rc[i - 1][1].plus(chunks[i][1]), rc[i - 1][2] ];
+            rc[i] = this.permutation(stateBuffer);
         }
-        return output[0];
+        return rc[MAX_ROUND - 1][0].toString(10);
     }
 
-    public hash(chunks: string[], nonpadBitSize:number):string {
-        const chunk1 = BigNumber(chunks[0]);
-        const chunk2 = BigNumber(chunks[1]);
-        const output = this.permutation([chunk1, chunk2, BigNumber(nonpadBitSize)]);
-        return output[0].toString(10);
-    }
+    // public hash(chunks: string[], nonpadBitSize:number):string {
+    //     const chunk1 = BigNumber(chunks[0]);
+    //     const chunk2 = BigNumber(chunks[1]);
+    //     const output = this.permutation([chunk1, chunk2, BigNumber(nonpadBitSize)]);
+    //     return output[0].toString(10);
+    // }
 
 }
 

@@ -9,9 +9,8 @@
     "lint": "next lint",
     "install-root": "npm install",
     "install-rc": "cd reinforced-concrete/rc-circom && npm install",
-    "build-rc" : "cd reinforced-concrete/rc-circom && yarn build",
+    "build-rc": "cd reinforced-concrete/rc-circom && yarn build",
     "install-all": "npm-run-all install-root install-rc build-rc"
-    
   },
   "dependencies": {
     "@nextui-org/react": "^2.4.0",

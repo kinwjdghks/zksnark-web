@@ -12,11 +12,11 @@ cd ../build
 echo -e "\033[36m----------------------\033[0m"
 echo -e "\033[36mSETTING UP ENVIRONMENT\033[0m"
 echo -e "\033[36m----------------------\033[0m"
-if [ -f ./powersOfTau28_hez_final_14.ptau ]; then
-    echo -e "\033[33mpowersOfTau28_hez_final_14.ptau already exists. Skipping.\033[0m"
+if [ -f ./powersOfTau28_hez_final_17.ptau ]; then
+    echo -e "\033[33mpowersOfTau28_hez_final_17.ptau already exists. Skipping.\033[0m"
 else
-    echo -e "\033[33mDownloading powersOfTau28_hez_final_14.ptau\033[0m"
-    wget https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_14.ptau
+    echo -e "\033[33mDownloading powersOfTau28_hez_final_17.ptau\033[0m"
+    wget https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_17.ptau
 fi
 
 #define variables
@@ -53,7 +53,7 @@ npx snarkjs r1cs export json ./build/$circuit_name.r1cs ./build/$circuit_name.r1
 #run initial groth16 trusted setup, produce first .zkey
 echo -e "\033[36mRunning groth16 trusted setup\033[0m"
 
-npx snarkjs groth16 setup ./build/$circuit_name.r1cs ./build/powersOfTau28_hez_final_14.ptau ./build/setup/circuit_00000.zkey
+npx snarkjs groth16 setup ./build/$circuit_name.r1cs ./build/powersOfTau28_hez_final_17.ptau ./build/setup/circuit_00000.zkey
 
 #add two contribution to the phase 2 setup, each time generate .zkey
 #use a beacon phase to finalize the .zkey file, ensuring no single participant has control over the final key.
