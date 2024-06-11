@@ -1,2 +1,0 @@
-Hello world! Today is 6/4 Tue
-Is this hash working?

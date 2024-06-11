@@ -22,7 +22,7 @@ export default function RootLayout({
       <body className={`${inter.className}`}>
         <NextUIProvider>
           <Header />
-          <div className="(header\footer space) h-screen pt-24 pb-20 overflow-hidden">
+          <div className="(header,footer space) h-screen pt-24 pb-20 overflow-hidden">
           {children}
           </div>
           <Footer />

@@ -5,7 +5,8 @@ import { promisify } from "util";
 import fs from "fs";
 import { fetchAsBuffer } from "@/lib/functions/fetchAsBuffer";
 import { parseState } from "@/lib/functions/parseState";
-import { ReinforcedConcreteHash } from "@/reinforced-concrete/functions/hash";
+import { getHash } from "@/reinforced-concrete/functions/hash";
+// import { ReinforcedConcreteHash } from "@/reinforced-concrete/functions/hash";
 export const dynamic = "force-dynamic"; // defaults to auto
 
 export async function GET(req: NextRequest, res: NextResponse) {
@@ -19,10 +20,10 @@ export async function GET(req: NextRequest, res: NextResponse) {
   console.log("chunks created.")
   // console.log("chunks: ", chunks);
   // console.log("nonpadBitSize: ",nonpadBitSize);
-  const inputPath = path.join(process.cwd(), "temp", "input.json");
+  const inputFilePath = path.join(process.cwd(), "temp", "input.json");
 
   fs.writeFileSync(
-    inputPath,
+    inputFilePath,
     JSON.stringify({
       state: matrixState,
       nonpadBitSize: nonpadBitSize,
@@ -47,23 +48,23 @@ export async function GET(req: NextRequest, res: NextResponse) {
   const proofFilePath = path.join(process.cwd(), "temp", "proof.json");
   const publicFilePath = path.join(process.cwd(), "temp", "public.json");
 
-  const myHash = new ReinforcedConcreteHash().spongeHash(matrixState, nonpadBitSize);
+  // const myHash = new ReinforcedConcreteHash().spongeHash(matrixState, nonpadBitSize);
+  const myHash:string = await getHash();
+  if(!myHash) throw new Error("hash calculation failed");
+     
   console.log("myHash:", myHash);
-
   const snarkPromise = promisify(exec);
 
   try {
     await snarkPromise(
-      `snarkjs groth16 fullprove ${inputPath} ${wasmPath} ${zkeyPath} ${proofFilePath} ${publicFilePath}`
+      `snarkjs groth16 fullprove ${inputFilePath} ${wasmPath} ${zkeyPath} ${proofFilePath} ${publicFilePath}`
     );
 
     const proof = fs.readFileSync(proofFilePath, "utf-8");
-    // const public_ = fs.readFileSync(publicFilePath, "utf-8");
-    // console.log(proof);
     return NextResponse.json({
       message: "prove successfully generated.",
       proof: proof,
-      public_: myHash, //replace with my hash output.
+      public_: myHash.trim(), //replace with my hash output.
     });
   } catch (error) {
     return NextResponse.json({ message: "prove generation failed." });

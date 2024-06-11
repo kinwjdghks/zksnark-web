@@ -1,5 +1,4 @@
 export const fetchAsBuffer = async (url: string): Promise<ArrayBuffer|undefined> => {
-    // Fetch the file from the URL
     const response = await fetch(url);
     if (!response.ok) return;
 

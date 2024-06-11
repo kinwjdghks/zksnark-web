@@ -8,6 +8,7 @@ import { Button, Input } from "@nextui-org/react";
 import { saveAs } from "file-saver";
 import { ChangeEvent, ReactNode, useState } from "react";
 import { FiUpload } from "react-icons/fi";
+import { getHash } from "@/reinforced-concrete/functions/hash";
 // import fs from 'fs';
 
 const UploadPanel = (): ReactNode => {
@@ -22,6 +23,7 @@ const UploadPanel = (): ReactNode => {
   };
 
   const handleUpload = async () => {
+
     if (!file) {
       console.log("no file uploaded!");
       return;
@@ -41,13 +43,6 @@ const UploadPanel = (): ReactNode => {
     }
     var blob = new Blob([proof]);
     saveAs(blob, `${file.name}-key.json`);
-
-    //store document and the hash to the db
-    // console.log("doc: ",{
-    //   title:title,
-    //   url:url,
-    //   hash: public_,
-    // });
 
     const uploadReq = await createzkDoc(title, url, public_, date);
     if (!uploadReq) return;
