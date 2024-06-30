@@ -19,7 +19,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
     try{
       const { stderr, stdout} = await snarkPromise(`snarkjs groth16 verify ${verificationKeyPath} ${publicFilePath} ${proofFilePath}`);
-      // console.log("stdout:", stdout);
       return NextResponse.json({ message: "verified successfully.", success: "true" })
     
     } catch (error) {
